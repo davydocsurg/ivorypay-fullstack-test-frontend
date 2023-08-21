@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Input as AInput } from "antd";
 import { useField } from "@unform/core";
 
@@ -21,25 +21,26 @@ const Input: React.FC<InputProps> = ({
     icon,
     onChange,
 }) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const { fieldName, registerField } = useField(name);
+    // const inputRef = useRef<HTMLInputElement>(null);
+    // const { fieldName, registerField } = useField(name);
 
-    useEffect(() => {
-        registerField({
-            name: fieldName,
-            ref: inputRef.current,
-            path: "value",
-            setValue(value: string) {
-                if (inputRef.current) {
-                    inputRef.current.value = value ?? "";
-                }
-            },
-        });
-    }, [fieldName, registerField]);
+    // useEffect(() => {
+    //     registerField({
+    //         name: fieldName,
+    //         ref: inputRef.current,
+    //         path: "value",
+    //         setValue(value: string) {
+    //             if (inputRef.current) {
+    //                 inputRef.current.value = value ?? "";
+    //             }
+    //         },
+    //     });
+    // }, [fieldName, registerField]);
 
     return (
         <>
             <label htmlFor={name}>{label}</label>
+
             <AInput
                 id={name}
                 name={name}

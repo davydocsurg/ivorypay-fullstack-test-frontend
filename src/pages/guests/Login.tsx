@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { UserOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Form } from "@unform/web";
 import { useForm } from "../../commons/form";
 import { loginSchema } from "./validations";
@@ -40,7 +40,6 @@ const loginFormFields = [
 const Login: React.FC = () => {
     const form = useForm({ schema: loginSchema });
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
     const { login } = useAuth();
 
     const handleLogin = useCallback(
@@ -59,7 +58,9 @@ const Login: React.FC = () => {
                 if (res.status === httpStatus.OK) {
                     form.clear();
                     toast.dismiss();
-                    navigate(navbarLinks.dashboard);
+                    setTimeout(() => {
+                        location.href = navbarLinks.dashboard;
+                    }, 1000);
                 }
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
@@ -68,7 +69,7 @@ const Login: React.FC = () => {
                 setLoading(false);
             }
         },
-        [form, setLoading, navigate, login]
+        [form, setLoading, login]
     );
 
     return (

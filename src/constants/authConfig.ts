@@ -3,10 +3,8 @@ import { User } from "../types";
 const authToken = "auth-token";
 const authUser = "auth-user";
 
-const localStorageChecks =
-    typeof window !== "undefined" && typeof localStorage !== "undefined";
-const AUTH_TOKEN = localStorageChecks && localStorage.getItem(authToken);
-const AUTH_USER = localStorageChecks && localStorage.getItem(authUser);
+const AUTH_TOKEN = localStorage.getItem(authToken);
+const AUTH_USER = localStorage.getItem(authUser);
 
 const saveAuthUserToken = (token: string) => {
     localStorage.setItem(authToken, token);
@@ -25,8 +23,6 @@ const removeAuthUserDetails = () => {
 };
 
 const authCheck = (): boolean => {
-    // console.log(AUTH_TOKEN, "from source");
-
     if (AUTH_TOKEN) {
         return true;
     }

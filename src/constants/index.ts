@@ -56,7 +56,7 @@ import {
 } from "./authConfig";
 
 const PRIMARY_COLOR = "#1b147d";
-const APP_BASE = "https://emailgeniusapi.onrender.com/";
+const APP_BASE = "http://localhost:8080/";
 const API_BASE_URL = APP_BASE + "api/v1";
 
 export {

@@ -66,6 +66,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             saveAuthUserDetails(user);
 
             setData({ token, user });
+
+            return true;
         } catch (error) {
             console.error("Login error:", error);
             throw error; // Rethrow the error for the caller to handle

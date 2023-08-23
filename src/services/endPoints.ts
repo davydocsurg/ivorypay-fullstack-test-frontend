@@ -1,7 +1,7 @@
 const endPoints = {
-    login: "/login",
-    logout: "/logout",
-    register: "/register",
+    login: "/auth/login",
+    logout: "/auth/logout",
+    register: "/auth/register",
     forgotPassword: "/forgot-password",
     resetPassword: "/reset-password",
     verifyEmail: "/verify-email",
@@ -17,7 +17,7 @@ const messages = {
 };
 
 const navbarLinks = {
-    home: "/",
+    dashboard: "/dashboard",
     login: "/login",
     register: "/register",
     forgotPassword: "/forgot-password",

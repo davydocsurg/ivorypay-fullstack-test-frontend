@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { UserOutlined, InboxOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
     api,
     endPoints,
@@ -31,7 +31,6 @@ const registerFormFields = [
         label: "First Name",
         placeholder: "John",
         required: true,
-        value: "hello",
     },
     {
         type: "text",
@@ -69,22 +68,25 @@ const Register: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { login } = useAuth();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const referralCode = queryParams.get("referral-code");
 
     const handleSubmit = useCallback(
         async (data: RegistrationFormData) => {
-            console.log("====================================");
-            console.log(data);
-            console.log("====================================");
             const toast = new Toast();
             try {
                 setLoading(true);
                 toast.loading("Registering...");
 
                 await form.validation(data);
-                return;
-                const res = await api.post(endPoints.register, data);
 
-                if (res.status === 200) {
+                const res = await api.post(
+                    `${endPoints.register}?referralCode=${referralCode}`,
+                    data
+                );
+
+                if (res.status === 201) {
                     toast.success(messages.registerSuccess);
 
                     toast.loading(messages.logginIn);
@@ -98,7 +100,7 @@ const Register: React.FC = () => {
 
                 toast.dismiss();
                 setLoading(false);
-                navigate(navbarLinks.home);
+                navigate(navbarLinks.dashboard);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 const { message } = errorHandler(error);
@@ -106,7 +108,7 @@ const Register: React.FC = () => {
                 setLoading(false);
             }
         },
-        [form, setLoading, login, navigate]
+        [form, referralCode, setLoading, login, navigate]
     );
 
     return (
@@ -128,12 +130,15 @@ const Register: React.FC = () => {
                             placeholder={field.placeholder}
                             required={field.required}
                             style={field.style}
-                            value={field.value}
                         />
                     ))}
 
                     <div className="mt-5">
-                        <Button type="submit" text="Sign in" />
+                        <Button
+                            loading={loading}
+                            type="submit"
+                            text="Register"
+                        />
                     </div>
                 </Form>
 

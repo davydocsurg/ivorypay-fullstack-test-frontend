@@ -1,3 +1,5 @@
+import { User } from "../types";
+
 const authToken = "auth-token";
 const authUser = "auth-user";
 
@@ -10,7 +12,7 @@ const saveAuthUserToken = (token: string) => {
     localStorage.setItem(authToken, token);
 };
 
-const saveAuthUserDetails = (user: any) => {
+const saveAuthUserDetails = (user: User) => {
     localStorage.setItem(authUser, JSON.stringify(user));
 };
 

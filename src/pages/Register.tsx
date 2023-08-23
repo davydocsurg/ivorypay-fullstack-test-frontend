@@ -1,11 +1,32 @@
-import { Col, Form } from "antd";
 import React from "react";
 import { UserOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../components";
-import { useForm } from "antd/es/form/Form";
 import { Link } from "react-router-dom";
 
-const loginFormFields = [
+const registerFormFields = [
+    {
+        type: "text",
+        name: "firstName",
+        icon: <UserOutlined />,
+        label: "First Name",
+        placeholder: "John",
+        required: true,
+        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+            console.log(event.target.value);
+        },
+    },
+    {
+        type: "text",
+        name: "lastName",
+        icon: <UserOutlined />,
+        label: "Last Name",
+        placeholder: "Doe",
+        required: true,
+        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+            console.log(event.target.value);
+        },
+        style: { marginTop: 20 },
+    },
     {
         type: "email",
         name: "email",
@@ -16,6 +37,7 @@ const loginFormFields = [
         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
             console.log(event.target.value);
         },
+        style: { marginTop: 20 },
     },
     {
         type: "password",
@@ -31,7 +53,7 @@ const loginFormFields = [
     },
 ];
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -41,12 +63,12 @@ const Login: React.FC = () => {
                     alt="Your Company"
                 />
                 <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                    Sign in to your account
+                    Sign Up
                 </h2>
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form>
-                    {loginFormFields.map((field) => (
+                    {registerFormFields.map((field) => (
                         <Input
                             key={field.name}
                             type={field.type}
@@ -65,12 +87,12 @@ const Login: React.FC = () => {
                 </form>
 
                 <p className="mt-10 text-center text-sm text-gray-500">
-                    Don't have an account?{" "}
+                    Already have an account?{" "}
                     <Link
-                        to={"/register"}
+                        to={"/"}
                         className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                     >
-                        Sign up
+                        Sign in
                     </Link>
                 </p>
             </div>
@@ -78,4 +100,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default Register;

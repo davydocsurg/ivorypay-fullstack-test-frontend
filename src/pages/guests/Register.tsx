@@ -20,7 +20,7 @@ interface RegistrationFormData {
     lastName: string;
     email: string;
     password: string;
-    passwordConfirmation: string;
+    // passwordConfirmation: string;
 }
 
 const registerFormFields = [
@@ -31,9 +31,7 @@ const registerFormFields = [
         label: "First Name",
         placeholder: "John",
         required: true,
-        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-            console.log(event.target.value);
-        },
+        value: "hello",
     },
     {
         type: "text",
@@ -42,9 +40,7 @@ const registerFormFields = [
         label: "Last Name",
         placeholder: "Doe",
         required: true,
-        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-            console.log(event.target.value);
-        },
+
         style: { marginTop: 20 },
     },
     {
@@ -54,9 +50,7 @@ const registerFormFields = [
         label: "Email",
         placeholder: "jondoe@example.com",
         required: true,
-        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-            console.log(event.target.value);
-        },
+
         style: { marginTop: 20 },
     },
     {
@@ -67,9 +61,6 @@ const registerFormFields = [
         placeholder: "********",
         required: true,
         style: { marginTop: 20 },
-        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-            console.log(event.target.value);
-        },
     },
 ];
 
@@ -81,6 +72,9 @@ const Register: React.FC = () => {
 
     const handleSubmit = useCallback(
         async (data: RegistrationFormData) => {
+            console.log("====================================");
+            console.log(data);
+            console.log("====================================");
             const toast = new Toast();
             try {
                 setLoading(true);
@@ -123,7 +117,7 @@ const Register: React.FC = () => {
                 </h2>
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <Form onSubmit={handleSubmit} ref={form.ref}>
+                <Form ref={form.ref} onSubmit={handleSubmit}>
                     {registerFormFields.map((field) => (
                         <Input
                             key={field.name}
@@ -134,6 +128,7 @@ const Register: React.FC = () => {
                             placeholder={field.placeholder}
                             required={field.required}
                             style={field.style}
+                            value={field.value}
                         />
                     ))}
 

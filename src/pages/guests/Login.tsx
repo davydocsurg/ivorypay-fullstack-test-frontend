@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { UserOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Form } from "@unform/web";
+import { useForm } from "../../commons/form";
+import { loginSchema } from "./validations";
+import { useAuth } from "../../context";
+import { Toast } from "../../utils";
+import { LoginCredentials } from "../../types";
+import { httpStatus } from "../../constants";
+import { errorHandler, navbarLinks } from "../../services";
 
 const loginFormFields = [
     {
@@ -30,6 +38,39 @@ const loginFormFields = [
 ];
 
 const Login: React.FC = () => {
+    const form = useForm({ schema: loginSchema });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
+    const handleLogin = useCallback(
+        async (data: LoginCredentials) => {
+            const toast = new Toast();
+            try {
+                setLoading(true);
+                toast.loading("Logging in...");
+
+                await form.validation(data);
+
+                const res = await login({
+                    ...data,
+                });
+
+                if (res.status === httpStatus.OK) {
+                    form.clear();
+                    toast.dismiss();
+                    navigate(navbarLinks.dashboard);
+                }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
+                const { message } = errorHandler(error);
+                toast.error(message);
+                setLoading(false);
+            }
+        },
+        [form, setLoading, navigate, login]
+    );
+
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -38,7 +79,7 @@ const Login: React.FC = () => {
                 </h2>
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form>
+                <Form ref={form.ref} onSubmit={handleLogin}>
                     {loginFormFields.map((field) => (
                         <Input
                             key={field.name}
@@ -53,9 +94,9 @@ const Login: React.FC = () => {
                     ))}
 
                     <div className="mt-5">
-                        <Button type="submit" text="Sign in" />
+                        <Button loading={loading} type="submit" text="Login" />
                     </div>
-                </form>
+                </Form>
 
                 <p className="mt-10 text-center text-sm text-gray-500">
                     Don't have an account?{" "}

@@ -54,6 +54,7 @@ import {
     saveAuthUserToken,
     authCheck,
 } from "./authConfig";
+import httpStatus from "./httpStatus";
 
 const PRIMARY_COLOR = "#1b147d";
 const APP_BASE = "http://localhost:8080/";
@@ -110,6 +111,7 @@ export {
     AUTH_TOKEN,
     AUTH_USER,
     APP_BASE,
+    httpStatus,
     removeAuthUserDetails,
     removeAuthUserToken,
     saveAuthUserDetails,

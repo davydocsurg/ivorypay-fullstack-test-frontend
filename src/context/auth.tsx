@@ -5,6 +5,7 @@ import React, {
     useContext,
     useState,
 } from "react";
+import { AxiosResponse } from "axios";
 import { AuthState, LoginCredentials, LoginRequest, User } from "../types";
 import {
     AUTH_TOKEN,
@@ -16,11 +17,17 @@ import {
 } from "../constants";
 import { api, endPoints, navbarLinks } from "../services";
 
+interface ApiResponse {
+    status: number;
+    data: AxiosResponse["data"];
+}
+
 interface AuthContextData {
     user: User;
     loading: boolean;
     setLoading: (loading: boolean) => void;
-    login(credentials: LoginCredentials): Promise<void>;
+    // eslint
+    login(credentials: LoginCredentials): Promise<ApiResponse>;
     logout(): void;
     prepUserDetails: () => void;
 }
@@ -52,27 +59,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
     };
 
-    const login = useCallback(async ({ email, password }: LoginRequest) => {
-        try {
-            const response = await api.post(endPoints.login, {
-                email,
-                password,
-            });
-            console.log(response);
+    const login = useCallback(
+        async ({ email, password }: LoginRequest): Promise<ApiResponse> => {
+            try {
+                const response = await api.post(endPoints.login, {
+                    email,
+                    password,
+                });
+                console.log(response);
 
-            const { token, user } = response.data;
+                const { token, user } = response.data;
 
-            saveAuthUserToken(token);
-            saveAuthUserDetails(user);
+                saveAuthUserToken(token);
+                saveAuthUserDetails(user);
 
-            setData({ token, user });
+                setData({ token, user });
 
-            return true;
-        } catch (error) {
-            console.error("Login error:", error);
-            throw error; // Rethrow the error for the caller to handle
-        }
-    }, []);
+                const { status, data } = response;
+                return {
+                    status,
+                    data,
+                };
+            } catch (error) {
+                console.error("Login error:", error);
+                throw error; // Rethrow the error for the caller to handle
+            }
+        },
+        []
+    );
 
     const logout = useCallback(() => {
         removeAuthUserToken();

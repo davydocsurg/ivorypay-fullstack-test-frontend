@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { Input as AInput } from "antd";
-import { useField } from "@unform/core";
 
 interface InputProps {
     name: string;
@@ -9,6 +8,9 @@ interface InputProps {
     value?: string;
     size?: "large" | "small";
     icon?: React.ReactNode;
+    style?: React.CSSProperties;
+    placeholder?: string;
+    required?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -19,26 +21,13 @@ const Input: React.FC<InputProps> = ({
     value,
     size,
     icon,
+    style,
+    placeholder,
+    required,
     onChange,
 }) => {
-    // const inputRef = useRef<HTMLInputElement>(null);
-    // const { fieldName, registerField } = useField(name);
-
-    // useEffect(() => {
-    //     registerField({
-    //         name: fieldName,
-    //         ref: inputRef.current,
-    //         path: "value",
-    //         setValue(value: string) {
-    //             if (inputRef.current) {
-    //                 inputRef.current.value = value ?? "";
-    //             }
-    //         },
-    //     });
-    // }, [fieldName, registerField]);
-
     return (
-        <>
+        <div style={style}>
             <label htmlFor={name}>{label}</label>
 
             <AInput
@@ -49,8 +38,10 @@ const Input: React.FC<InputProps> = ({
                 size={size}
                 prefix={icon}
                 onChange={onChange}
+                placeholder={placeholder}
+                required={required}
             />
-        </>
+        </div>
     );
 };
 

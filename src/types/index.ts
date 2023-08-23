@@ -8,6 +8,7 @@ import type {
 import type { Wallet } from "./wallet";
 import type { Transaction } from "./transaction";
 import type { Invitation } from "./invitation";
+import type Option from "./Options";
 
 export type {
     User,
@@ -18,4 +19,5 @@ export type {
     Wallet,
     Transaction,
     Invitation,
+    Option,
 };

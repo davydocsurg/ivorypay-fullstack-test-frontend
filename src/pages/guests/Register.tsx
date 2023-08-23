@@ -1,7 +1,19 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { UserOutlined, InboxOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+    api,
+    endPoints,
+    errorHandler,
+    messages,
+    navbarLinks,
+} from "../../services";
+import { useAuth } from "../../context";
+import { Toast } from "../../utils";
+import { useForm } from "../../commons/form";
+import { registrationSchema } from "./validations";
+import { Form } from "@unform/web";
 
 interface RegistrationFormData {
     firstName: string;
@@ -62,6 +74,11 @@ const registerFormFields = [
 ];
 
 const Register: React.FC = () => {
+    const form = useForm({ schema: registrationSchema });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
     const handleSubmit = useCallback(
         async (data: RegistrationFormData) => {
             const toast = new Toast();
@@ -70,6 +87,7 @@ const Register: React.FC = () => {
                 toast.loading("Registering...");
 
                 await form.validation(data);
+                return;
                 const res = await api.post(endPoints.register, data);
 
                 if (res.status === 200) {
@@ -86,14 +104,15 @@ const Register: React.FC = () => {
 
                 toast.dismiss();
                 setLoading(false);
-                router.push(sidebarLinks.dashboard);
+                navigate(navbarLinks.home);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 const { message } = errorHandler(error);
                 toast.error(message);
                 setLoading(false);
             }
         },
-        [form, setLoading, login, router]
+        [form, setLoading, login, navigate]
     );
 
     return (
@@ -104,7 +123,7 @@ const Register: React.FC = () => {
                 </h2>
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form>
+                <Form onSubmit={handleSubmit} ref={form.ref}>
                     {registerFormFields.map((field) => (
                         <Input
                             key={field.name}
@@ -121,7 +140,7 @@ const Register: React.FC = () => {
                     <div className="mt-5">
                         <Button type="submit" text="Sign in" />
                     </div>
-                </form>
+                </Form>
 
                 <p className="mt-10 text-center text-sm text-gray-500">
                     Already have an account?{" "}

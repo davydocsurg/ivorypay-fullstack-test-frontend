@@ -30,3 +30,18 @@ export interface User {
     referredBy?: User;
     invitedBy?: User;
 }
+
+export interface AuthState {
+    token: string;
+    user: User;
+}
+
+export interface LoginCredentials {
+    email: string;
+    password: string;
+}
+
+export interface LoginRequest {
+    email: string;
+    password: string;
+}

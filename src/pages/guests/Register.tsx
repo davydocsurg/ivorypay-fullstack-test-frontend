@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { UserOutlined, InboxOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
 import { Link } from "react-router-dom";
+
+interface RegistrationFormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+}
 
 const registerFormFields = [
     {
@@ -54,6 +62,40 @@ const registerFormFields = [
 ];
 
 const Register: React.FC = () => {
+    const handleSubmit = useCallback(
+        async (data: RegistrationFormData) => {
+            const toast = new Toast();
+            try {
+                setLoading(true);
+                toast.loading("Registering...");
+
+                await form.validation(data);
+                const res = await api.post(endPoints.register, data);
+
+                if (res.status === 200) {
+                    toast.success(messages.registerSuccess);
+
+                    toast.loading(messages.logginIn);
+                    await login({
+                        email: data.email,
+                        password: data.password,
+                    });
+                }
+
+                form.clear();
+
+                toast.dismiss();
+                setLoading(false);
+                router.push(sidebarLinks.dashboard);
+            } catch (error: any) {
+                const { message } = errorHandler(error);
+                toast.error(message);
+                setLoading(false);
+            }
+        },
+        [form, setLoading, login, router]
+    );
+
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">

@@ -16,7 +16,10 @@ import {
     saveAuthUserToken,
 } from "../constants";
 import { api, endPoints, navbarLinks } from "../services";
-import { saveAuthUserWallet } from "../constants/authConfig";
+import {
+    removeAuthUserWallet,
+    saveAuthUserWallet,
+} from "../constants/authConfig";
 
 interface ApiResponse {
     status: number;
@@ -94,6 +97,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const logout = useCallback(() => {
         removeAuthUserToken();
         removeAuthUserDetails();
+        removeAuthUserWallet();
         setData({} as AuthState);
 
         window.location.replace(navbarLinks.login);

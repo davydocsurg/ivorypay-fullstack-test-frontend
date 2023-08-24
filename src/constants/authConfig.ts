@@ -6,6 +6,7 @@ const authUserWallet = "auth-user-wallet";
 
 const AUTH_TOKEN = localStorage.getItem(authToken);
 const AUTH_USER = localStorage.getItem(authUser);
+const AUTH_USER_WALLET = localStorage.getItem(authUserWallet);
 
 const saveAuthUserToken = (token: string) => {
     localStorage.setItem(authToken, token);
@@ -27,8 +28,19 @@ const removeAuthUserDetails = () => {
     localStorage.removeItem(authUser);
 };
 
+const removeAuthUserWallet = () => {
+    localStorage.removeItem(authUserWallet);
+};
+
 const authCheck = (): boolean => {
     if (AUTH_TOKEN) {
+        return true;
+    }
+    return false;
+};
+
+const walletCheck = (): boolean => {
+    if (AUTH_USER_WALLET) {
         return true;
     }
     return false;
@@ -44,6 +56,13 @@ const adminCheck = (): boolean => {
     return false;
 };
 
+const getAuthUserWallet = (): Wallet => {
+    if (AUTH_USER_WALLET) {
+        return JSON.parse(AUTH_USER_WALLET);
+    }
+    return {} as Wallet;
+};
+
 export {
     AUTH_TOKEN,
     AUTH_USER,
@@ -56,4 +75,7 @@ export {
     authCheck,
     adminCheck,
     saveAuthUserWallet,
+    walletCheck,
+    getAuthUserWallet,
+    removeAuthUserWallet,
 };

@@ -43,7 +43,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 await fetchUsers();
                 return response.status;
             } catch (error) {
-                console.error("Error while fetching users: ", error);
+                console.error("Error while disabling users: ", error);
                 throw error;
             }
         },

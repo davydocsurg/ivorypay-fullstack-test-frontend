@@ -6,7 +6,7 @@ import { maskUp } from "./hooks";
 interface InputProps {
     mask?: string;
     name: string;
-    label: string;
+    label?: string;
     type?: string;
     value?: string;
     size?: "large" | "small";

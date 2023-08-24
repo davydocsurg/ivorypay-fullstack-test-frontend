@@ -12,6 +12,7 @@ import { saveAuthUserWallet } from "../constants/authConfig";
 interface WalletContextData {
     // wallet: Wallet;
     createWallet(): Promise<number>;
+    depositAmount(amount: number): Promise<number>;
 }
 
 interface WalletProviderProps {
@@ -23,7 +24,7 @@ const WalletContext = createContext<WalletContextData>({} as WalletContextData);
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const createWallet = useCallback(async () => {
         try {
-            const response = await api.post(endPoints.createWallet);
+            const response = await api.post(endPoints.wallets.create);
             saveAuthUserWallet(response.data.wallet);
             return response.status;
         } catch (error) {
@@ -32,10 +33,23 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         }
     }, []);
 
+    const depositAmount = useCallback(async (amount: number) => {
+        try {
+            const response = await api.post(endPoints.wallets.deposit, {
+                amount,
+            });
+            return response.status;
+        } catch (error) {
+            console.error("Error while depositing to wallet: ", error);
+            throw error;
+        }
+    }, []);
+
     return (
         <WalletContext.Provider
             value={{
                 createWallet,
+                depositAmount,
             }}
         >
             {children}

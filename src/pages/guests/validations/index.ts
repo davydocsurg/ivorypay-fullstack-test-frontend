@@ -30,4 +30,8 @@ const emailSchema = Yup.object().shape({
     email: commonFields.email,
 });
 
-export { registrationSchema, loginSchema, emailSchema };
+const depositAmountSchema = Yup.object().shape({
+    amount: Yup.number().required().min(1),
+});
+
+export { registrationSchema, loginSchema, emailSchema, depositAmountSchema };

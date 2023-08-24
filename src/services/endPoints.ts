@@ -5,6 +5,7 @@ const endPoints = {
     forgotPassword: "/forgot-password",
     resetPassword: "/reset-password",
     verifyEmail: "/verify-email",
+    fetchUsers: "/admin/users",
 };
 
 const messages = {

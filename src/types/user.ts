@@ -23,10 +23,10 @@ export interface User {
     resetPasswordExpires?: Date | null;
     isActive: boolean;
     // otp: Otp[];
-    referredUsers: User[];
-    wallet: Wallet;
-    referrals: Invitation[];
-    transactions: Transaction[];
+    referredUsers?: User[];
+    wallet?: Wallet;
+    referrals?: Invitation[];
+    transactions?: Transaction[];
     referredBy?: User;
     invitedBy?: User;
 }

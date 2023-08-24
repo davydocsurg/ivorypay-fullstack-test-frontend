@@ -66,7 +66,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     email,
                     password,
                 });
-                console.log(response);
 
                 const { token, user } = response.data;
 

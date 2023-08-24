@@ -1,10 +1,5 @@
 import { Button, Card, Col, Row, Typography } from "antd";
-import {
-    UserOutlined,
-    UserAddOutlined,
-    UsergroupAddOutlined,
-    WalletOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, WalletOutlined } from "@ant-design/icons";
 import React, { useCallback, useState } from "react";
 import { getAuthUserWallet, httpStatus } from "../../constants";
 import { useManageWallet } from "../../context";
@@ -28,12 +23,15 @@ interface TransferFunds extends Deposit {
 
 const ManageWallet: React.FC = () => {
     const depositForm = useForm({ schema: depositAmountSchema });
+    const withdrawForm = useForm({ schema: depositAmountSchema });
     const transferForm = useForm({ schema: tFundsSchema });
     const wallet = getAuthUserWallet();
-    const { createWallet, depositAmount, transferFunds } = useManageWallet();
+    const { createWallet, depositAmount, transferFunds, withdrawFunds } =
+        useManageWallet();
     const [loading, setLoading] = useState(false);
     const [depositing, setDepositing] = useState(false);
-    const [transfering, setTransfering] = useState(false);
+    const [transferring, setTransferring] = useState(false);
+    const [withdrawing, setWithdrawing] = useState(false);
 
     const handleCreateWallet = useCallback(async () => {
         const toast = new Toast();
@@ -88,14 +86,14 @@ const ManageWallet: React.FC = () => {
             const toast = new Toast();
             try {
                 toast.loading("Processing...");
-                setTransfering(true);
+                setTransferring(true);
 
                 const res = await transferFunds(data);
                 if (res === httpStatus.OK) {
                     toast.success(
                         "Your transfer was successful! Check your email for more details."
                     );
-                    setTransfering(false);
+                    setTransferring(false);
                     toast.dismiss();
                 }
                 transferForm.clear();
@@ -103,11 +101,38 @@ const ManageWallet: React.FC = () => {
             } catch (error: any) {
                 const { message } = errorHandler(error);
                 toast.error(message);
-                setTransfering(false);
+                setTransferring(false);
                 toast.dismiss();
             }
         },
         [transferForm, transferFunds]
+    );
+
+    const handleWithdrawFunds = useCallback(
+        async (data: Deposit) => {
+            const toast = new Toast();
+            try {
+                toast.loading("Processing...");
+                setWithdrawing(true);
+
+                await withdrawForm.validation(data);
+                const amount = data.amount;
+
+                const res = await withdrawFunds(amount);
+                if (res === httpStatus.OK) {
+                    withdrawForm.clear();
+                    toast.dismiss();
+                    toast.success(`You've successfully withdrawn ${amount}`);
+                    setWithdrawing(false);
+                }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
+                const { message } = errorHandler(error);
+                toast.error(message);
+                setWithdrawing(false);
+            }
+        },
+        [withdrawForm, withdrawFunds]
     );
 
     return (
@@ -115,7 +140,7 @@ const ManageWallet: React.FC = () => {
             <Title>Manage Wallet</Title>
 
             <Row gutter={[16, 16]}>
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={6}>
                     <Card>
                         {wallet.address ? (
                             <>
@@ -133,7 +158,7 @@ const ManageWallet: React.FC = () => {
                     </Card>
                 </Col>
 
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                     <Card>
                         <Title level={5}>Deposit Funds</Title>
                         <Form ref={depositForm.ref} onSubmit={handleDeposit}>
@@ -144,6 +169,7 @@ const ManageWallet: React.FC = () => {
                                 placeholder="50.00"
                                 type="number"
                                 style={{ marginBottom: 10 }}
+                                size="large"
                             />
                             <TBtn
                                 text="Deposit"
@@ -154,7 +180,7 @@ const ManageWallet: React.FC = () => {
                     </Card>
                 </Col>
 
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                     <Card>
                         <Title level={5}>Transfer Funds</Title>
                         <Form
@@ -168,6 +194,7 @@ const ManageWallet: React.FC = () => {
                                 placeholder="50.00"
                                 type="number"
                                 style={{ marginBottom: 10 }}
+                                size="large"
                             />
                             <Input
                                 label="Recipient Email"
@@ -176,11 +203,37 @@ const ManageWallet: React.FC = () => {
                                 placeholder="john@example.com"
                                 type="email"
                                 style={{ marginBottom: 10 }}
+                                size="large"
                             />
                             <TBtn
                                 text="Transfer"
                                 type="submit"
-                                loading={transfering}
+                                loading={transferring}
+                            />
+                        </Form>
+                    </Card>
+                </Col>
+
+                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                    <Card>
+                        <Title level={5}>Withdraw Funds</Title>
+                        <Form
+                            ref={withdrawForm.ref}
+                            onSubmit={handleWithdrawFunds}
+                        >
+                            <Input
+                                label="Enter Amount"
+                                name="amount"
+                                icon={<WalletOutlined />}
+                                placeholder="50.00"
+                                type="number"
+                                style={{ marginBottom: 10 }}
+                                size="large"
+                            />
+                            <TBtn
+                                text="Withdraw"
+                                type="submit"
+                                loading={withdrawing}
                             />
                         </Form>
                     </Card>

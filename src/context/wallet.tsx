@@ -3,10 +3,9 @@ import React, {
     createContext,
     useCallback,
     useContext,
-    useState,
 } from "react";
 import { api, endPoints } from "../services";
-import { TransactionInput, Wallet } from "../types";
+import { TransactionInput } from "../types";
 import { saveAuthUserWallet } from "../constants/authConfig";
 
 interface WalletContextData {
@@ -14,6 +13,7 @@ interface WalletContextData {
     createWallet(): Promise<number>;
     depositAmount(amount: number): Promise<number>;
     transferFunds(data: TransactionInput): Promise<number>;
+    withdrawFunds(amount: number): Promise<number>;
 }
 
 interface WalletProviderProps {
@@ -53,7 +53,19 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
             });
             return response.status;
         } catch (error) {
-            console.error("Error while depositing to wallet: ", error);
+            console.error("Error while transferring funds: ", error);
+            throw error;
+        }
+    }, []);
+
+    const withdrawFunds = useCallback(async (amount: number) => {
+        try {
+            const response = await api.post(endPoints.wallets.withdraw, {
+                amount,
+            });
+            return response.status;
+        } catch (error) {
+            console.error("Error while withdrawing funds: ", error);
             throw error;
         }
     }, []);
@@ -64,6 +76,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                 createWallet,
                 depositAmount,
                 transferFunds,
+                withdrawFunds,
             }}
         >
             {children}

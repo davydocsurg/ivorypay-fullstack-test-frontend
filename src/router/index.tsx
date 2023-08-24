@@ -4,6 +4,7 @@ import {
     Dashboard,
     DashboardLayout,
     InviteAdmin,
+    InviteUsers,
     ManageUsers,
 } from "../pages/auth";
 import { adminCheck, authCheck } from "../constants";
@@ -48,6 +49,15 @@ const AppRoutes = () => {
                         element={
                             <RequireAuth>
                                 <Dashboard />
+                            </RequireAuth>
+                        }
+                    />,
+                    <Route
+                        key={"invite-users"}
+                        path={navbarLinks.inviteUsers}
+                        element={
+                            <RequireAuth>
+                                <InviteUsers />
                             </RequireAuth>
                         }
                     />,

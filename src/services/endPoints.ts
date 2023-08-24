@@ -20,7 +20,7 @@ const navbarLinks = {
     dashboard: "/dashboard",
     manageUsers: "/dashboard/admin/manage-users",
     inviteAdmin: "/dashboard/admin/invite-admin",
-    inviteUser: "/dashboard/admin/invite-user",
+    inviteUsers: "/dashboard/admin/invite-users",
     wallets: {
         create: "/dashboard/wallets/create",
         deposit: "/dashboard/wallets/deposit",

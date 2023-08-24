@@ -4,11 +4,13 @@ import {
     UserOutlined,
     DashboardOutlined,
     UserAddOutlined,
+    UsergroupAddOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { Link } from "react-router-dom"; // Make sure to import Link
 import { adminCheck } from "../../constants";
 import { navbarLinks } from "../../services";
+import { useAuth } from "../../context";
 
 const { Sider } = Layout;
 
@@ -18,6 +20,7 @@ interface SideBarOpts {
 
 const SideBar: React.FC<SideBarOpts> = ({ collapsed }) => {
     const isAdmin = adminCheck();
+    const { logout } = useAuth();
 
     const logoutMenu = {
         marginTop: 150,
@@ -62,10 +65,14 @@ const SideBar: React.FC<SideBarOpts> = ({ collapsed }) => {
                         </Menu.Item>
                     </>
                 )}
+                <Menu.Item key="invite-users" icon={<UsergroupAddOutlined />}>
+                    <Link to={navbarLinks.inviteUsers}>Invite Users</Link>
+                </Menu.Item>
                 <Menu.Item
                     key="logout"
                     icon={<UploadOutlined />}
                     style={{ ...logoutMenu }}
+                    onClick={logout}
                 >
                     Logout
                 </Menu.Item>

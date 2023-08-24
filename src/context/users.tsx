@@ -9,7 +9,7 @@ import { User } from "../types";
 import { api, endPoints } from "../services";
 
 interface UserContextData {
-    users: User;
+    users: User[];
     fetchUsers(): Promise<void>;
     // disableUser(): Promise<User>;
     // enableUser: () => Promise<User>;
@@ -22,11 +22,11 @@ interface UserProviderProps {
 const UserContext = createContext<UserContextData>({} as UserContextData);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [users, setUsers] = useState<User>();
+    const [users, setUsers] = useState<User[]>([]);
     const fetchUsers = useCallback(async () => {
         try {
             const response = await api.get(endPoints.fetchUsers);
-            setUsers(response.data);
+            setUsers(response.data.users);
         } catch (error) {
             console.error("Error while fetching users: ", error);
             throw error;

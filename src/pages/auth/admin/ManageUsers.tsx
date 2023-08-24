@@ -1,39 +1,32 @@
-import { Table, Typography } from "antd";
+import { Table, Typography, Empty, Col } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useManageUsers } from "../../../context";
+import { User } from "../../../types";
 
 const { Title } = Typography;
 
 const userColums = [
     {
         title: "Name",
-        dataIndex: "name",
+        dataIndex: "fullName", // Use a computed property for full name
         key: "name",
     },
     {
-        title: "Age",
-        dataIndex: "age",
-        key: "age",
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
     },
     {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
-    },
-];
-
-const dataSource = [
-    {
-        key: "1",
-        name: "Mike",
-        age: 32,
-        address: "10 Downing Street",
+        title: "Role",
+        dataIndex: "role",
+        key: "role",
     },
     {
-        key: "2",
-        name: "John",
-        age: 42,
-        address: "10 Downing Street",
+        title: "Status",
+        dataIndex: "isActive",
+        key: "status",
+        render: (isActive: boolean) => (isActive ? "Active" : "Inactive"),
     },
 ];
 
@@ -42,15 +35,46 @@ const ManageUsers: React.FC = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [fetchUsers]);
+
+    if (!Array.isArray(users)) {
+        return (
+            <Col
+                style={{
+                    textAlign: "center",
+                }}
+            >
+                <PageTitle />
+
+                <LoadingOutlined
+                    style={{
+                        textAlign: "center",
+                        fontSize: 50,
+                        marginTop: "30vh",
+                    }}
+                />
+            </Col>
+        );
+    }
+
+    const dataSource = users?.map((user: User) => ({
+        key: user.id,
+        fullName: `${user.firstName} ${user.lastName}`,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+    }));
 
     return (
         <>
-            <Title>Manage Users</Title>
-
+            <PageTitle />
             <Table dataSource={dataSource} columns={userColums} />
         </>
     );
+};
+
+const PageTitle: React.FC = () => {
+    return <Title>Manage Users</Title>;
 };
 
 export default ManageUsers;

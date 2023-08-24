@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { UserOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Form } from "@unform/web";
 import { useForm } from "../../commons/form";
 import { loginSchema } from "./validations";

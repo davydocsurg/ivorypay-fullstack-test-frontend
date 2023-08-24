@@ -18,7 +18,15 @@ const messages = {
 
 const navbarLinks = {
     dashboard: "/dashboard",
-    login: "/login",
+    manageUsers: "/dashboard/admin/manage-users",
+    inviteAdmin: "/dashboard/admin/invite-admin",
+    inviteUsers: "/dashboard/admin/invite-users",
+    wallets: {
+        create: "/dashboard/wallets/create",
+        deposit: "/dashboard/wallets/deposit",
+        withdraw: "/dashboard/wallets/withdraw",
+    },
+    login: "/",
     register: "/register",
     forgotPassword: "/forgot-password",
     unknown: "*",

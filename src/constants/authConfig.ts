@@ -29,6 +29,16 @@ const authCheck = (): boolean => {
     return false;
 };
 
+const adminCheck = (): boolean => {
+    if (AUTH_USER) {
+        const user = JSON.parse(AUTH_USER);
+        if (user.role === "admin") {
+            return true;
+        }
+    }
+    return false;
+};
+
 export {
     AUTH_TOKEN,
     AUTH_USER,
@@ -39,4 +49,5 @@ export {
     removeAuthUserDetails,
     removeAuthUserToken,
     authCheck,
+    adminCheck,
 };

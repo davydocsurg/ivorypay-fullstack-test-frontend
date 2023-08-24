@@ -10,7 +10,7 @@ import { getAuthUserWallet, httpStatus } from "../../constants";
 import { useManageWallet } from "../../context";
 import { Toast } from "../../utils";
 import { errorHandler } from "../../services";
-import { depositAmountSchema } from "../guests/validations";
+import { depositAmountSchema, tFundsSchema } from "../guests/validations";
 import { useForm } from "../../commons/form";
 import { Input } from "../../components";
 import { Form } from "@unform/web";
@@ -22,12 +22,18 @@ interface Deposit {
     amount: number;
 }
 
+interface TransferFunds extends Deposit {
+    recipientEmail: string;
+}
+
 const ManageWallet: React.FC = () => {
     const depositForm = useForm({ schema: depositAmountSchema });
+    const transferForm = useForm({ schema: tFundsSchema });
     const wallet = getAuthUserWallet();
-    const { createWallet, depositAmount } = useManageWallet();
+    const { createWallet, depositAmount, transferFunds } = useManageWallet();
     const [loading, setLoading] = useState(false);
     const [depositing, setDepositing] = useState(false);
+    const [transfering, setTransfering] = useState(false);
 
     const handleCreateWallet = useCallback(async () => {
         const toast = new Toast();
@@ -54,13 +60,15 @@ const ManageWallet: React.FC = () => {
         async (data: Deposit) => {
             const toast = new Toast();
             try {
-                toast.loading("Creating wallet...");
+                toast.loading("Processing...");
                 setDepositing(true);
 
+                await depositForm.validation(data);
                 const amount = data.amount;
 
                 const res = await depositAmount(amount);
                 if (res === httpStatus.OK) {
+                    depositForm.clear();
                     toast.dismiss();
                     toast.success("Your wallet has been funded successfully!");
                     setDepositing(false);
@@ -72,7 +80,34 @@ const ManageWallet: React.FC = () => {
                 setDepositing(false);
             }
         },
-        [depositAmount]
+        [depositAmount, depositForm]
+    );
+
+    const handleTransferFunds = useCallback(
+        async (data: TransferFunds) => {
+            const toast = new Toast();
+            try {
+                toast.loading("Processing...");
+                setTransfering(true);
+
+                const res = await transferFunds(data);
+                if (res === httpStatus.OK) {
+                    toast.success(
+                        "Your transfer was successful! Check your email for more details."
+                    );
+                    setTransfering(false);
+                    toast.dismiss();
+                }
+                transferForm.clear();
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
+                const { message } = errorHandler(error);
+                toast.error(message);
+                setTransfering(false);
+                toast.dismiss();
+            }
+        },
+        [transferForm, transferFunds]
     );
 
     return (
@@ -80,7 +115,7 @@ const ManageWallet: React.FC = () => {
             <Title>Manage Wallet</Title>
 
             <Row gutter={[16, 16]}>
-                <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                     <Card>
                         {wallet.address ? (
                             <>
@@ -98,7 +133,7 @@ const ManageWallet: React.FC = () => {
                     </Card>
                 </Col>
 
-                <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                     <Card>
                         <Title level={5}>Deposit Funds</Title>
                         <Form ref={depositForm.ref} onSubmit={handleDeposit}>
@@ -108,12 +143,44 @@ const ManageWallet: React.FC = () => {
                                 icon={<WalletOutlined />}
                                 placeholder="50.00"
                                 type="number"
-                                style={{ marginBottom: 5 }}
+                                style={{ marginBottom: 10 }}
                             />
                             <TBtn
                                 text="Deposit"
                                 type="submit"
                                 loading={depositing}
+                            />
+                        </Form>
+                    </Card>
+                </Col>
+
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                    <Card>
+                        <Title level={5}>Transfer Funds</Title>
+                        <Form
+                            ref={transferForm.ref}
+                            onSubmit={handleTransferFunds}
+                        >
+                            <Input
+                                label="Enter Amount"
+                                name="amount"
+                                icon={<WalletOutlined />}
+                                placeholder="50.00"
+                                type="number"
+                                style={{ marginBottom: 10 }}
+                            />
+                            <Input
+                                label="Recipient Email"
+                                name="recipientEmail"
+                                icon={<UserOutlined />}
+                                placeholder="john@example.com"
+                                type="email"
+                                style={{ marginBottom: 10 }}
+                            />
+                            <TBtn
+                                text="Transfer"
+                                type="submit"
+                                loading={transfering}
                             />
                         </Form>
                     </Card>

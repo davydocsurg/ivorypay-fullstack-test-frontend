@@ -16,6 +16,10 @@ const commonFields = {
     password: passwordValidation,
 };
 
+const commonWalletFields = {
+    amount: Yup.number().required().min(1),
+};
+
 const registrationSchema = Yup.object().shape({
     firstName: Yup.string().required().min(3).max(150),
     lastName: Yup.string().required().min(3).max(150),
@@ -31,7 +35,18 @@ const emailSchema = Yup.object().shape({
 });
 
 const depositAmountSchema = Yup.object().shape({
-    amount: Yup.number().required().min(1),
+    ...commonWalletFields,
 });
 
-export { registrationSchema, loginSchema, emailSchema, depositAmountSchema };
+const tFundsSchema = Yup.object().shape({
+    ...commonWalletFields,
+    recipientEmail: commonFields.email,
+});
+
+export {
+    registrationSchema,
+    loginSchema,
+    emailSchema,
+    depositAmountSchema,
+    tFundsSchema,
+};

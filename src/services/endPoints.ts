@@ -12,6 +12,7 @@ const endPoints = {
     wallets: {
         create: "/wallets/create",
         deposit: "/wallets/deposit",
+        transfer: "/wallets/transfer",
     },
 };
 

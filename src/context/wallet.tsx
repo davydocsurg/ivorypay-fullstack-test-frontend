@@ -6,13 +6,14 @@ import React, {
     useState,
 } from "react";
 import { api, endPoints } from "../services";
-import { Wallet } from "../types";
+import { TransactionInput, Wallet } from "../types";
 import { saveAuthUserWallet } from "../constants/authConfig";
 
 interface WalletContextData {
     // wallet: Wallet;
     createWallet(): Promise<number>;
     depositAmount(amount: number): Promise<number>;
+    transferFunds(data: TransactionInput): Promise<number>;
 }
 
 interface WalletProviderProps {
@@ -45,11 +46,24 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         }
     }, []);
 
+    const transferFunds = useCallback(async (data: TransactionInput) => {
+        try {
+            const response = await api.post(endPoints.wallets.transfer, {
+                ...data,
+            });
+            return response.status;
+        } catch (error) {
+            console.error("Error while depositing to wallet: ", error);
+            throw error;
+        }
+    }, []);
+
     return (
         <WalletContext.Provider
             value={{
                 createWallet,
                 depositAmount,
+                transferFunds,
             }}
         >
             {children}

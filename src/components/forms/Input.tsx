@@ -5,6 +5,7 @@ import { maskUp } from "./hooks";
 
 interface InputProps {
     mask?: string;
+    info?: string;
     name: string;
     label?: string;
     type?: string;
@@ -19,6 +20,7 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = ({
     mask,
+    info,
     name,
     label,
     type = "text",
@@ -96,6 +98,7 @@ const Input: React.FC<InputProps> = ({
                 onBlur={handleBlur}
                 ref={inputRef}
             />
+            <small className="text-sm text-indigo-700">{info}</small>
         </div>
     );
 };

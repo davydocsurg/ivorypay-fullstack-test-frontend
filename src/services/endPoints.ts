@@ -9,6 +9,7 @@ const endPoints = {
     disableUser: "/admin/users/disable",
     enableUser: "/admin/users/enable",
     inviteAdmin: "/admin/users/invitation",
+    inviteUsers: "/users/invitation",
     wallets: {
         create: "/wallets/create",
         deposit: "/wallets/deposit",

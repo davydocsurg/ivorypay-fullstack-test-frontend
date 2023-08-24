@@ -8,6 +8,7 @@ const endPoints = {
     fetchUsers: "/admin/users",
     disableUser: "/admin/users/disable",
     enableUser: "/admin/users/enable",
+    inviteAdmin: "/admin/users/invitation",
 };
 
 const messages = {

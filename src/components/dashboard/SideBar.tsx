@@ -5,6 +5,7 @@ import {
     DashboardOutlined,
     UserAddOutlined,
     UsergroupAddOutlined,
+    WalletOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -68,6 +69,10 @@ const SideBar: React.FC<SideBarOpts> = ({ collapsed }) => {
                 <Menu.Item key="invite-users" icon={<UsergroupAddOutlined />}>
                     <Link to={navbarLinks.inviteUsers}>Invite Users</Link>
                 </Menu.Item>
+                <Menu.Item key="manage-wallet" icon={<WalletOutlined />}>
+                    <Link to={navbarLinks.manageWallet}>Manage Wallet</Link>
+                </Menu.Item>
+
                 <Menu.Item
                     key="logout"
                     icon={<UploadOutlined />}

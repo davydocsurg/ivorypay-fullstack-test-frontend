@@ -16,6 +16,7 @@ import {
     saveAuthUserToken,
 } from "../constants";
 import { api, endPoints, navbarLinks } from "../services";
+import { saveAuthUserWallet } from "../constants/authConfig";
 
 interface ApiResponse {
     status: number;
@@ -67,7 +68,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     password,
                 });
 
-                const { token, user } = response.data;
+                const { token, user, wallet } = response.data;
+                if (wallet) {
+                    saveAuthUserWallet(wallet);
+                }
 
                 saveAuthUserToken(token);
                 saveAuthUserDetails(user);

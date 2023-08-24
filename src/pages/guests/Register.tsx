@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { UserOutlined, InboxOutlined, LockFilled } from "@ant-design/icons";
 import { Button, Input } from "../../components";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     api,
     endPoints,
@@ -67,7 +67,6 @@ const registerFormFields = [
 const Register: React.FC = () => {
     const form = useForm({ schema: registrationSchema });
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
     const { login } = useAuth();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);

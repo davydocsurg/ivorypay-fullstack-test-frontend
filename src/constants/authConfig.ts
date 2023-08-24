@@ -1,7 +1,8 @@
-import { User } from "../types";
+import { User, Wallet } from "../types";
 
 const authToken = "auth-token";
 const authUser = "auth-user";
+const authUserWallet = "auth-user-wallet";
 
 const AUTH_TOKEN = localStorage.getItem(authToken);
 const AUTH_USER = localStorage.getItem(authUser);
@@ -12,6 +13,10 @@ const saveAuthUserToken = (token: string) => {
 
 const saveAuthUserDetails = (user: User) => {
     localStorage.setItem(authUser, JSON.stringify(user));
+};
+
+const saveAuthUserWallet = (wallet: Wallet) => {
+    localStorage.setItem(authUserWallet, JSON.stringify(wallet));
 };
 
 const removeAuthUserToken = () => {
@@ -50,4 +55,5 @@ export {
     removeAuthUserToken,
     authCheck,
     adminCheck,
+    saveAuthUserWallet,
 };

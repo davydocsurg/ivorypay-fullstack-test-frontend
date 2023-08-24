@@ -4,6 +4,7 @@ import {
     UserOutlined,
     UserAddOutlined,
     UsergroupAddOutlined,
+    WalletOutlined,
 } from "@ant-design/icons";
 import { Card, Col, Row } from "antd";
 import { Link } from "react-router-dom";
@@ -63,6 +64,23 @@ const Dashboard: React.FC = () => {
                             <UsergroupAddOutlined style={{ fontSize: 25 }} />
                             <Title style={{ color: "white" }} level={4}>
                                 Invite Users
+                            </Title>
+                        </Card>
+                    </Link>
+                </Col>
+
+                <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                    <Link to={navbarLinks.manageWallet}>
+                        <Card
+                            style={{
+                                textAlign: "center",
+                                backgroundColor: "green",
+                                color: "white",
+                            }}
+                        >
+                            <WalletOutlined style={{ fontSize: 25 }} />
+                            <Title style={{ color: "white" }} level={4}>
+                                Manage Wallet
                             </Title>
                         </Card>
                     </Link>

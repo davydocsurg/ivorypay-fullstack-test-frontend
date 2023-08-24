@@ -1,41 +1,43 @@
-import { Table, Typography, Empty, Col } from "antd";
+import { Table, Typography, Col, Button } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useManageUsers } from "../../../context";
 import { User } from "../../../types";
+import { Toast } from "../../../utils";
+import { errorHandler } from "../../../services";
+import { httpStatus } from "../../../constants";
 
 const { Title } = Typography;
 
-const userColums = [
-    {
-        title: "Name",
-        dataIndex: "fullName", // Use a computed property for full name
-        key: "name",
-    },
-    {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-    },
-    {
-        title: "Role",
-        dataIndex: "role",
-        key: "role",
-    },
-    {
-        title: "Status",
-        dataIndex: "isActive",
-        key: "status",
-        render: (isActive: boolean) => (isActive ? "Active" : "Inactive"),
-    },
-];
-
 const ManageUsers: React.FC = () => {
-    const { users, fetchUsers } = useManageUsers();
+    const { users, fetchUsers, disableUser } = useManageUsers();
+    const [loading, setLoading] = useState(false);
+    const toast = new Toast();
 
     useEffect(() => {
         fetchUsers();
     }, [fetchUsers]);
+
+    const handleEnableUser = (email: string) => {};
+
+    const handleDisableUser = async (email: string) => {
+        console.log(email);
+
+        try {
+            toast.loading("Disabling user...");
+            setLoading(true);
+            const res = await disableUser(email);
+            if (res === httpStatus.OK) {
+                toast.success("User disabled successfully!");
+            }
+            setLoading(false);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            const { message } = errorHandler(error);
+            toast.error(message);
+            setLoading(false);
+        }
+    };
 
     if (!Array.isArray(users)) {
         return (
@@ -57,9 +59,50 @@ const ManageUsers: React.FC = () => {
         );
     }
 
-    const dataSource = users?.map((user: User) => ({
+    const userColums = [
+        {
+            title: "Name",
+            key: "name",
+            render: (record: User) => `${record.firstName} ${record.lastName}`,
+        },
+
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+        },
+        {
+            title: "Role",
+            dataIndex: "role",
+            key: "role",
+        },
+        {
+            title: "Status",
+            dataIndex: "isActive",
+            key: "status",
+            render: (isActive: boolean) => (isActive ? "Active" : "Inactive"),
+        },
+        {
+            title: "Actions",
+            dataIndex: "actions",
+            key: "actions",
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (_: any, record: User) => (
+                <UserActions
+                    loading={loading}
+                    record={record}
+                    onEnable={() => handleEnableUser(record.email)}
+                    onDisable={() => handleDisableUser(record.email)}
+                />
+            ),
+        },
+    ];
+
+    const dataSource: User[] = users.map((user: User) => ({
+        id: user.id,
         key: user.id,
-        fullName: `${user.firstName} ${user.lastName}`,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
         isActive: user.isActive,
@@ -68,13 +111,56 @@ const ManageUsers: React.FC = () => {
     return (
         <>
             <PageTitle />
-            <Table dataSource={dataSource} columns={userColums} />
+            <Table
+                pagination={{ pageSize: 20 }}
+                dataSource={dataSource}
+                columns={userColums}
+            />
         </>
     );
 };
 
 const PageTitle: React.FC = () => {
     return <Title>Manage Users</Title>;
+};
+
+const UserActions = ({
+    loading,
+    record,
+    onEnable,
+    onDisable,
+}: {
+    loading: boolean;
+    record: User;
+    onEnable: () => void;
+    onDisable: () => void;
+}) => {
+    const { isActive } = record;
+
+    const handleEnable = () => {
+        onEnable(); // Call the parent's enable handler
+    };
+
+    const handleDisable = () => {
+        onDisable(); // Call the parent's disable handler
+    };
+
+    return (
+        <div>
+            {isActive ? (
+                <Button
+                    type="primary"
+                    disabled={loading}
+                    danger
+                    onClick={handleDisable}
+                >
+                    Disable
+                </Button>
+            ) : (
+                <Button onClick={handleEnable}>Enable</Button>
+            )}
+        </div>
+    );
 };
 
 export default ManageUsers;

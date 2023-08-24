@@ -11,7 +11,7 @@ import { api, endPoints } from "../services";
 interface UserContextData {
     users: User[];
     fetchUsers(): Promise<void>;
-    // disableUser(): Promise<User>;
+    disableUser(email: string): Promise<number>;
     // enableUser: () => Promise<User>;
 }
 
@@ -33,11 +33,24 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         }
     }, []);
 
+    const disableUser = useCallback(async (email: string) => {
+        try {
+            const response = await api.patch(endPoints.disableUser, {
+                email,
+            });
+            return response.status;
+        } catch (error) {
+            console.error("Error while fetching users: ", error);
+            throw error;
+        }
+    }, []);
+
     return (
         <UserContext.Provider
             value={{
                 users: users!,
                 fetchUsers,
+                disableUser,
             }}
         >
             {children}

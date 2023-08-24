@@ -12,11 +12,11 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    password?: string;
     role: RoleEnumType;
     referralCode?: string | null;
     passwordChangedAt?: Date | null;
-    verificationStatus: string;
+    verificationStatus?: string;
     verifiedAt?: Date | null;
     verificationToken?: string | null;
     resetPasswordToken?: string | null;

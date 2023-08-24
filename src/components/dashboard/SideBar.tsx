@@ -3,10 +3,12 @@ import {
     UploadOutlined,
     UserOutlined,
     DashboardOutlined,
-    VideoCameraOutlined,
+    UserAddOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { Link } from "react-router-dom"; // Make sure to import Link
+import { adminCheck } from "../../constants";
+import { navbarLinks } from "../../services";
 
 const { Sider } = Layout;
 
@@ -15,6 +17,16 @@ interface SideBarOpts {
 }
 
 const SideBar: React.FC<SideBarOpts> = ({ collapsed }) => {
+    const isAdmin = adminCheck();
+
+    const logoutMenu = {
+        marginTop: 150,
+        backgroundColor: "red",
+        color: "white",
+        borderRadius: "4px",
+        fontWeight: "bold",
+    };
+
     return (
         <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="demo-logo-vertical" />
@@ -31,13 +43,31 @@ const SideBar: React.FC<SideBarOpts> = ({ collapsed }) => {
                     icon={<DashboardOutlined />}
                     style={{ marginTop: 100 }}
                 >
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to={navbarLinks.dashboard}>Dashboard</Link>
                 </Menu.Item>
-                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                    <Link to="/nav2">nav 2</Link>
-                </Menu.Item>
-                <Menu.Item key="3" icon={<UploadOutlined />}>
-                    <Link to="/nav3">nav 3</Link>
+                {isAdmin && (
+                    <>
+                        <Menu.Item key="manage-users" icon={<UserOutlined />}>
+                            <Link to={navbarLinks.manageUsers}>
+                                Manage Users
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item
+                            key="invite-admin"
+                            icon={<UserAddOutlined />}
+                        >
+                            <Link to={navbarLinks.inviteAdmin}>
+                                Invite Admin
+                            </Link>
+                        </Menu.Item>
+                    </>
+                )}
+                <Menu.Item
+                    key="logout"
+                    icon={<UploadOutlined />}
+                    style={{ ...logoutMenu }}
+                >
+                    Logout
                 </Menu.Item>
             </Menu>
         </Sider>

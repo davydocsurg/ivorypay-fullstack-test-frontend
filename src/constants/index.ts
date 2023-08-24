@@ -53,6 +53,7 @@ import {
     saveAuthUserDetails,
     saveAuthUserToken,
     authCheck,
+    adminCheck,
 } from "./authConfig";
 import httpStatus from "./httpStatus";
 
@@ -117,4 +118,5 @@ export {
     saveAuthUserDetails,
     saveAuthUserToken,
     authCheck,
+    adminCheck,
 };

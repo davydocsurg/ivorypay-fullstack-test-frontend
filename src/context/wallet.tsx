@@ -3,13 +3,14 @@ import React, {
     createContext,
     useCallback,
     useContext,
+    useState,
 } from "react";
 import { api, endPoints } from "../services";
 import { TransactionInput } from "../types";
-import { saveAuthUserWallet } from "../constants/authConfig";
+import { getAuthUserWallet, saveAuthUserWallet } from "../constants/authConfig";
 
 interface WalletContextData {
-    // wallet: Wallet;
+    walletBalance: number;
     createWallet(): Promise<number>;
     depositAmount(amount: number): Promise<number>;
     transferFunds(data: TransactionInput): Promise<number>;
@@ -21,12 +22,16 @@ interface WalletProviderProps {
 }
 
 const WalletContext = createContext<WalletContextData>({} as WalletContextData);
+const wallet = getAuthUserWallet();
 
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
+    const [walletBalance, setWalletBalance] = useState<number>(wallet.balance);
     const createWallet = useCallback(async () => {
         try {
             const response = await api.post(endPoints.wallets.create);
+
             saveAuthUserWallet(response.data.wallet);
+            setWalletBalance(response.data.wallet.balance);
             return response.status;
         } catch (error) {
             console.error("Error while creating wallet: ", error);
@@ -39,6 +44,8 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
             const response = await api.post(endPoints.wallets.deposit, {
                 amount,
             });
+            saveAuthUserWallet(response.data.wallet);
+            setWalletBalance(response.data.wallet.balance);
             return response.status;
         } catch (error) {
             console.error("Error while depositing to wallet: ", error);
@@ -51,6 +58,8 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
             const response = await api.post(endPoints.wallets.transfer, {
                 ...data,
             });
+            saveAuthUserWallet(response.data.wallet);
+            setWalletBalance(response.data.wallet.balance);
             return response.status;
         } catch (error) {
             console.error("Error while transferring funds: ", error);
@@ -63,6 +72,8 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
             const response = await api.post(endPoints.wallets.withdraw, {
                 amount,
             });
+            saveAuthUserWallet(response.data.wallet);
+            setWalletBalance(response.data.wallet.balance);
             return response.status;
         } catch (error) {
             console.error("Error while withdrawing funds: ", error);
@@ -73,6 +84,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     return (
         <WalletContext.Provider
             value={{
+                walletBalance,
                 createWallet,
                 depositAmount,
                 transferFunds,

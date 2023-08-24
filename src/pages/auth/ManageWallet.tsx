@@ -1,6 +1,6 @@
 import { Button, Card, Col, Row, Typography } from "antd";
 import { UserOutlined, WalletOutlined } from "@ant-design/icons";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getAuthUserWallet, httpStatus } from "../../constants";
 import { useManageWallet } from "../../context";
 import { Toast } from "../../utils";
@@ -26,12 +26,21 @@ const ManageWallet: React.FC = () => {
     const withdrawForm = useForm({ schema: depositAmountSchema });
     const transferForm = useForm({ schema: tFundsSchema });
     const wallet = getAuthUserWallet();
-    const { createWallet, depositAmount, transferFunds, withdrawFunds } =
-        useManageWallet();
+    const {
+        walletBalance,
+        createWallet,
+        depositAmount,
+        transferFunds,
+        withdrawFunds,
+    } = useManageWallet();
     const [loading, setLoading] = useState(false);
     const [depositing, setDepositing] = useState(false);
     const [transferring, setTransferring] = useState(false);
     const [withdrawing, setWithdrawing] = useState(false);
+
+    useEffect(() => {
+        getAuthUserWallet();
+    }, [wallet]);
 
     const handleCreateWallet = useCallback(async () => {
         const toast = new Toast();
@@ -151,6 +160,9 @@ const ManageWallet: React.FC = () => {
                         <>
                             <Title level={5}>Wallet Address:</Title>
                             <Title level={5}>{wallet.address}</Title>
+                            <hr />
+                            <Title level={5}>Balance:</Title>
+                            <Title level={5}>{walletBalance}</Title>
                         </>
                     ) : (
                         <Button disabled={loading} onClick={handleCreateWallet}>

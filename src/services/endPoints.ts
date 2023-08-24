@@ -5,6 +5,10 @@ const endPoints = {
     forgotPassword: "/forgot-password",
     resetPassword: "/reset-password",
     verifyEmail: "/verify-email",
+    fetchUsers: "/admin/users",
+    disableUser: "/admin/users/disable",
+    enableUser: "/admin/users/enable",
+    inviteAdmin: "/admin/users/invitation",
 };
 
 const messages = {

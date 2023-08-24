@@ -7,7 +7,7 @@ import {
     UsergroupAddOutlined,
 } from "@ant-design/icons";
 import React from "react";
-import { Link } from "react-router-dom"; // Make sure to import Link
+import { Link } from "react-router-dom";
 import { adminCheck } from "../../constants";
 import { navbarLinks } from "../../services";
 import { useAuth } from "../../context";

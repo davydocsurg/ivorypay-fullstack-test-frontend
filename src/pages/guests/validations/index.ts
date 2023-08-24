@@ -26,4 +26,8 @@ const loginSchema = Yup.object().shape({
     ...commonFields,
 });
 
-export { registrationSchema, loginSchema };
+const emailSchema = Yup.object().shape({
+    email: commonFields.email,
+});
+
+export { registrationSchema, loginSchema, emailSchema };

@@ -1,3 +1,4 @@
 import { useAuth, AuthProvider } from "./auth";
+import { useManageUsers, UserProvider } from "./users";
 
-export { useAuth, AuthProvider };
+export { AuthProvider, useAuth, UserProvider, useManageUsers };

@@ -14,6 +14,7 @@ import { Toast } from "../../utils";
 import { useForm } from "../../commons/form";
 import { registrationSchema } from "./validations";
 import { Form } from "@unform/web";
+import { httpStatus } from "../../constants";
 
 interface RegistrationFormData {
     firstName: string;
@@ -71,6 +72,7 @@ const Register: React.FC = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const referralCode = queryParams.get("referral-code");
+    const role = queryParams.get("role");
 
     const handleSubmit = useCallback(
         async (data: RegistrationFormData) => {
@@ -81,26 +83,31 @@ const Register: React.FC = () => {
 
                 await form.validation(data);
 
-                const res = await api.post(
-                    `${endPoints.register}?referralCode=${referralCode}`,
-                    data
-                );
+                let regEndpoint = `${endPoints.register}?referralCode=${referralCode}`;
+                if (role) {
+                    regEndpoint += `&role=${role}`;
+                }
+
+                const res = await api.post(regEndpoint, data);
 
                 if (res.status === 201) {
                     toast.success(messages.registerSuccess);
 
                     toast.loading(messages.logginIn);
-                    await login({
+                    const loginRes = await login({
                         email: data.email,
                         password: data.password,
                     });
+                    if (loginRes.status === httpStatus.OK) {
+                        form.clear();
+                        toast.dismiss();
+                        setLoading(false);
+
+                        setTimeout(() => {
+                            window.location.href = navbarLinks.dashboard;
+                        }, 1000);
+                    }
                 }
-
-                form.clear();
-
-                toast.dismiss();
-                setLoading(false);
-                navigate(navbarLinks.dashboard);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 const { message } = errorHandler(error);
@@ -108,7 +115,7 @@ const Register: React.FC = () => {
                 setLoading(false);
             }
         },
-        [form, referralCode, setLoading, login, navigate]
+        [form, referralCode, setLoading, login, role]
     );
 
     return (

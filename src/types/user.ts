@@ -12,21 +12,21 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    password?: string;
     role: RoleEnumType;
     referralCode?: string | null;
     passwordChangedAt?: Date | null;
-    verificationStatus: string;
+    verificationStatus?: string;
     verifiedAt?: Date | null;
     verificationToken?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: Date | null;
     isActive: boolean;
     // otp: Otp[];
-    referredUsers: User[];
-    wallet: Wallet;
-    referrals: Invitation[];
-    transactions: Transaction[];
+    referredUsers?: User[];
+    wallet?: Wallet;
+    referrals?: Invitation[];
+    transactions?: Transaction[];
     referredBy?: User;
     invitedBy?: User;
 }

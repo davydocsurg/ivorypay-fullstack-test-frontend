@@ -12,7 +12,7 @@ interface UserContextData {
     users: User[];
     fetchUsers(): Promise<void>;
     disableUser(email: string): Promise<number>;
-    // enableUser: () => Promise<User>;
+    enableUser: (email: string) => Promise<number>;
 }
 
 interface UserProviderProps {
@@ -33,17 +33,37 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         }
     }, []);
 
-    const disableUser = useCallback(async (email: string) => {
-        try {
-            const response = await api.patch(endPoints.disableUser, {
-                email,
-            });
-            return response.status;
-        } catch (error) {
-            console.error("Error while fetching users: ", error);
-            throw error;
-        }
-    }, []);
+    const disableUser = useCallback(
+        async (email: string) => {
+            try {
+                const response = await api.patch(endPoints.disableUser, {
+                    email,
+                });
+                await fetchUsers();
+                return response.status;
+            } catch (error) {
+                console.error("Error while fetching users: ", error);
+                throw error;
+            }
+        },
+        [fetchUsers]
+    );
+
+    const enableUser = useCallback(
+        async (email: string) => {
+            try {
+                const response = await api.patch(endPoints.enableUser, {
+                    email,
+                });
+                await fetchUsers();
+                return response.status;
+            } catch (error) {
+                console.error("Error while fetching users: ", error);
+                throw error;
+            }
+        },
+        [fetchUsers]
+    );
 
     return (
         <UserContext.Provider
@@ -51,6 +71,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 users: users!,
                 fetchUsers,
                 disableUser,
+                enableUser,
             }}
         >
             {children}

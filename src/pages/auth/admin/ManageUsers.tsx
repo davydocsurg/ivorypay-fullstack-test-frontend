@@ -10,19 +10,33 @@ import { httpStatus } from "../../../constants";
 const { Title } = Typography;
 
 const ManageUsers: React.FC = () => {
-    const { users, fetchUsers, disableUser } = useManageUsers();
+    const { users, fetchUsers, disableUser, enableUser } = useManageUsers();
     const [loading, setLoading] = useState(false);
+
     const toast = new Toast();
 
     useEffect(() => {
         fetchUsers();
     }, [fetchUsers]);
 
-    const handleEnableUser = (email: string) => {};
+    const handleEnableUser = async (email: string) => {
+        try {
+            toast.loading("Enabling user...");
+            setLoading(true);
+            const res = await enableUser(email);
+            if (res === httpStatus.OK) {
+                toast.success("User enabled successfully!");
+            }
+            setLoading(false);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            const { message } = errorHandler(error);
+            toast.error(message);
+            setLoading(false);
+        }
+    };
 
     const handleDisableUser = async (email: string) => {
-        console.log(email);
-
         try {
             toast.loading("Disabling user...");
             setLoading(true);

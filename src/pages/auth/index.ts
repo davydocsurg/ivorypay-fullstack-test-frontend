@@ -1,3 +1,4 @@
-import Dashboard from "./dashboard";
+import DashboardLayout from "./Layout";
+import Dashboard from "./Dashboard";
 
-export { Dashboard };
+export { DashboardLayout, Dashboard };

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Login, Register } from "../pages";
-import { Dashboard } from "../pages/auth";
+import { Dashboard, DashboardLayout } from "../pages/auth";
 import { authCheck } from "../constants";
 
 const isAuthenticated = authCheck();
@@ -31,9 +31,20 @@ const AppRoutes = () => {
                 path="/dashboard"
                 element={
                     <RequireAuth>
-                        <Dashboard />
+                        <DashboardLayout />
                     </RequireAuth>
                 }
+                children={[
+                    <Route
+                        key={"dshindex"}
+                        path="/dashboard"
+                        element={
+                            <RequireAuth>
+                                <Dashboard />
+                            </RequireAuth>
+                        }
+                    />,
+                ]}
             />
         </Routes>
     );

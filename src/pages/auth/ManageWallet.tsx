@@ -138,26 +138,29 @@ const ManageWallet: React.FC = () => {
     return (
         <>
             <Title>Manage Wallet</Title>
+            <Col
+                xs={24}
+                sm={24}
+                md={12}
+                lg={8}
+                xl={6}
+                style={{ marginBottom: 12 }}
+            >
+                <Card>
+                    {wallet.address ? (
+                        <>
+                            <Title level={5}>Wallet Address:</Title>
+                            <Title level={5}>{wallet.address}</Title>
+                        </>
+                    ) : (
+                        <Button disabled={loading} onClick={handleCreateWallet}>
+                            {loading ? "Creating..." : "Create Wallet"}
+                        </Button>
+                    )}
+                </Card>
+            </Col>
 
             <Row gutter={[16, 16]}>
-                <Col xs={24} sm={24} md={12} lg={8} xl={6}>
-                    <Card>
-                        {wallet.address ? (
-                            <>
-                                <Title level={5}>Wallet Address:</Title>
-                                <Title level={5}>{wallet.address}</Title>
-                            </>
-                        ) : (
-                            <Button
-                                disabled={loading}
-                                onClick={handleCreateWallet}
-                            >
-                                {loading ? "Creating..." : "Create Wallet"}
-                            </Button>
-                        )}
-                    </Card>
-                </Col>
-
                 <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                     <Card>
                         <Title level={5}>Deposit Funds</Title>

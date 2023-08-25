@@ -1,11 +1,12 @@
 import { Layout, Menu } from "antd";
 import {
-    UploadOutlined,
+    LogoutOutlined,
     UserOutlined,
     DashboardOutlined,
     UserAddOutlined,
     UsergroupAddOutlined,
     WalletOutlined,
+    MoneyCollectOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -72,10 +73,15 @@ const SideBar: React.FC<SideBarOpts> = ({ collapsed }) => {
                 <Menu.Item key="manage-wallet" icon={<WalletOutlined />}>
                     <Link to={navbarLinks.manageWallet}>Manage Wallet</Link>
                 </Menu.Item>
+                <Menu.Item key="transactions" icon={<MoneyCollectOutlined />}>
+                    <Link to={navbarLinks.wallets.transactions}>
+                        Transactions
+                    </Link>
+                </Menu.Item>
 
                 <Menu.Item
                     key="logout"
-                    icon={<UploadOutlined />}
+                    icon={<LogoutOutlined />}
                     style={{ ...logoutMenu }}
                     onClick={logout}
                 >

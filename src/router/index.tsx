@@ -7,6 +7,7 @@ import {
     InviteUsers,
     ManageUsers,
     ManageWallet,
+    Transactions,
 } from "../pages/auth";
 import { adminCheck, authCheck } from "../constants";
 import { navbarLinks } from "../services";
@@ -68,6 +69,15 @@ const AppRoutes = () => {
                         element={
                             <RequireAuth>
                                 <ManageWallet />
+                            </RequireAuth>
+                        }
+                    />,
+                    <Route
+                        key={"manage-wallet"}
+                        path={navbarLinks.wallets.transactions}
+                        element={
+                            <RequireAuth>
+                                <Transactions />
                             </RequireAuth>
                         }
                     />,

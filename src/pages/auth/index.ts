@@ -4,6 +4,7 @@ import ManageUsers from "./admin/ManageUsers";
 import InviteAdmin from "./admin/InviteAdmin";
 import InviteUsers from "./InviteUsers";
 import ManageWallet from "./ManageWallet";
+import Transactions from "./Transactions";
 
 export {
     DashboardLayout,
@@ -12,4 +13,5 @@ export {
     InviteAdmin,
     InviteUsers,
     ManageWallet,
+    Transactions,
 };

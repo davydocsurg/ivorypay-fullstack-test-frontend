@@ -70,6 +70,7 @@ export default class Mask {
         let text = "";
 
         let countSpecial = 0;
+        // @ts-ignore
         intervals.forEach((interval, index) => {
             text += `$${index + 1}`;
 

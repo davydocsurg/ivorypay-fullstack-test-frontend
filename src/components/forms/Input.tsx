@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Input as AInput, InputRef } from "antd";
 import { useField } from "@unform/core";
 import { maskUp } from "./hooks";
@@ -35,8 +35,6 @@ const Input: React.FC<InputProps> = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const inputRef = useRef<React.Ref<InputRef> | any>(null);
     const { fieldName, defaultValue, registerField } = useField(name);
-    const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(false);
 
     useEffect(() => {
         registerField({
@@ -44,12 +42,12 @@ const Input: React.FC<InputProps> = ({
             ref: inputRef.current.input,
             path: "value",
 
+            // @ts-ignore
             //  eslint-disable-next-line @typescript-eslint/no-explicit-any
             setValue(ref: any, value: string) {
                 if (inputRef.current) {
                     inputRef.current.input.value = value ?? "";
                 }
-                setIsFilled(!!value);
             },
         });
     }, [fieldName, registerField]);
@@ -68,15 +66,6 @@ const Input: React.FC<InputProps> = ({
         [mask]
     );
 
-    const handleFocus = useCallback(() => {
-        setIsFocused(true);
-    }, []);
-
-    const handleBlur = useCallback(() => {
-        setIsFocused(false);
-        setIsFilled(!!inputRef.current?.value);
-    }, []);
-
     return (
         <div style={style}>
             <label htmlFor={name}>{label}</label>
@@ -94,8 +83,6 @@ const Input: React.FC<InputProps> = ({
                 required={required}
                 onKeyDown={handleMaskEvents}
                 onKeyUp={handleMaskEvents}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 ref={inputRef}
             />
             <small className="text-sm text-indigo-700">{info}</small>

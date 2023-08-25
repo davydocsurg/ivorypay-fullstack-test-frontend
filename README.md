@@ -1,28 +1,91 @@
-# React + TypeScript + Vite
+# IvoryPay Test Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the IvoryPay Test Frontend repository! This README provides an overview of the project, its features, setup instructions, and more.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+IvoryPay Test Frontend is a React application that provides a user interface for interacting with the IvoryPay Test Backend. It caters to both User and Admin personas, enabling them to perform various actions according to their roles.
 
-## Expanding the ESLint configuration
+## Personas
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### User
 
-- Configure the top-level `parserOptions` property like this:
+A regular user with an account and a wallet can:
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+-   Accept invitations from their email.
+-   Log in using their registered credentials.
+-   Deposit funds into their wallet.
+-   Transfer funds to other users.
+-   Withdraw funds from their wallet.
+-   Log out securely.
+
+### Admin
+
+An admin can:
+
+-   Accept invitations, just like regular users.
+-   Log in using their admin credentials.
+-   Manage users and admins by:
+    -   Listing all users and admins.
+    -   Inviting new users as regular users or admins.
+    -   Disabling and enabling users and admins based on their status.
+
+### Features
+
+-   User Registration: Register as a new user with a unique email.
+-   User Authentication: Log in using registered credentials.
+-   Invitation Acceptance: Accept invitations sent to your email.
+-   Wallet Management: Deposit, transfer, and withdraw funds from your wallet.
+-   Admin Controls: Manage users and admins with administrative privileges.
+
+## Getting Started
+
+Follow these steps to set up and run the IvoryPay Test Frontend on your local machine.
+
+### Prerequisites
+
+Node.js and npm (Node Package Manager) installed on your system.
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/davydocsurg/ivorypay-test-frontend.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# ivorypay-fullstack-test-frontend
+2. Navigate to the project directory:
+
+```bash
+cd ivorypay-test-frontend
+```
+
+3. Install dependencies:
+
+```bash
+yarn install
+```
+
+> OR
+
+```bash
+npm install
+```
+
+### Usage
+
+1. Start the development server:
+
+```bash
+yarn dev
+```
+
+> OR
+
+```bash
+npm run dev
+```
+
+This will launch the application in your default web browser.
+
+2. Explore the different features of the IvoryPay Test Frontend by interacting with the user interface.

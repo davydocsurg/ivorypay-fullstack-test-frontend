@@ -78,7 +78,7 @@ const Login: React.FC = () => {
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <WalletOutlined
-                style={{ fontSize: 60 }}
+                style={{ fontSize: 60, marginBottom: "5vh" }}
                 className="text-indigo-600"
             />
 

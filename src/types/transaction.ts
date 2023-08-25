@@ -15,3 +15,8 @@ export interface Transaction {
     senderWallet: Wallet;
     receiverWallet: Wallet;
 }
+
+export interface TransactionInput {
+    amount: number;
+    recipientEmail: string;
+}

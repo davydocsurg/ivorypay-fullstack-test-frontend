@@ -54,6 +54,9 @@ import {
     saveAuthUserToken,
     authCheck,
     adminCheck,
+    walletCheck,
+    getAuthUserWallet,
+    removeAuthUserWallet,
 } from "./authConfig";
 import httpStatus from "./httpStatus";
 
@@ -119,4 +122,7 @@ export {
     saveAuthUserToken,
     authCheck,
     adminCheck,
+    walletCheck,
+    getAuthUserWallet,
+    removeAuthUserWallet,
 };

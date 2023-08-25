@@ -13,7 +13,7 @@ import { errorHandler } from "../../../services";
 const { Title } = Typography;
 
 interface AdminEmails {
-    email: string;
+    emails: string;
 }
 
 const InviteAdmin: React.FC = () => {
@@ -28,15 +28,16 @@ const InviteAdmin: React.FC = () => {
                 toast.loading("Processing...");
                 setLoading(true);
 
-                const emails = [data.email];
+                const emails = data.emails
+                    .split(",")
+                    .map((email) => email.trim());
 
                 const res = await inviteAdmin(emails);
-                await form.validation(data);
                 if (res === httpStatus.OK) {
-                    form.clear();
                     toast.success("Invitation sent successfully!");
                     setLoading(false);
                 }
+                form.clear();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 const { message } = errorHandler(error);
@@ -51,15 +52,18 @@ const InviteAdmin: React.FC = () => {
         <>
             <Title level={4}>Invite a user as Admin</Title>
 
-            <Col lg={8} xl={8}>
+            <Col lg={24} xl={24}>
                 <Card>
                     <Form ref={form.ref} onSubmit={handleAdminInvitation}>
                         <Input
-                            label="Email"
-                            type="email"
+                            label="Email(s)"
+                            type="text"
                             required={true}
-                            name="email"
+                            name="emails"
                             icon={<UserOutlined />}
+                            size="large"
+                            info="You can enter a list of email addresses, separated by commas."
+                            placeholder="chi@example.com, john@example.com, gabriel@example.com"
                         />
 
                         <div className="mt-5">

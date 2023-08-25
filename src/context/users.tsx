@@ -14,6 +14,7 @@ interface UserContextData {
     disableUser(email: string): Promise<number>;
     enableUser: (email: string) => Promise<number>;
     inviteAdmin: (email: string[]) => Promise<number>;
+    inviteUsers: (email: string[]) => Promise<number>;
 }
 
 interface UserProviderProps {
@@ -43,7 +44,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 await fetchUsers();
                 return response.status;
             } catch (error) {
-                console.error("Error while fetching users: ", error);
+                console.error("Error while disabling users: ", error);
                 throw error;
             }
         },
@@ -74,7 +75,20 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
             return response.status;
         } catch (error) {
-            console.error("Error while fetching users: ", error);
+            console.error("Error while inviting admin: ", error);
+            throw error;
+        }
+    }, []);
+
+    const inviteUsers = useCallback(async (emails: string[]) => {
+        try {
+            const response = await api.post(endPoints.inviteUsers, {
+                emails,
+            });
+
+            return response.status;
+        } catch (error) {
+            console.error("Error while inviting users: ", error);
             throw error;
         }
     }, []);
@@ -87,6 +101,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 disableUser,
                 enableUser,
                 inviteAdmin,
+                inviteUsers,
             }}
         >
             {children}

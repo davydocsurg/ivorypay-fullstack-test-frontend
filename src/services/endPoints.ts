@@ -9,6 +9,13 @@ const endPoints = {
     disableUser: "/admin/users/disable",
     enableUser: "/admin/users/enable",
     inviteAdmin: "/admin/users/invitation",
+    inviteUsers: "/users/invitation",
+    wallets: {
+        create: "/wallets/create",
+        deposit: "/wallets/deposit",
+        transfer: "/wallets/transfer",
+        withdraw: "/wallets/withdraw",
+    },
 };
 
 const messages = {
@@ -24,12 +31,13 @@ const navbarLinks = {
     dashboard: "/dashboard",
     manageUsers: "/dashboard/admin/manage-users",
     inviteAdmin: "/dashboard/admin/invite-admin",
-    inviteUsers: "/dashboard/admin/invite-users",
+    inviteUsers: "/dashboard/invite-users",
     wallets: {
         create: "/dashboard/wallets/create",
         deposit: "/dashboard/wallets/deposit",
         withdraw: "/dashboard/wallets/withdraw",
     },
+    manageWallet: "/dashboard/manage-wallet",
     login: "/",
     register: "/register",
     forgotPassword: "/forgot-password",

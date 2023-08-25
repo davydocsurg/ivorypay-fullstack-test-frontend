@@ -3,6 +3,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useManageWallet } from "../../context";
 import { Transaction, Wallet } from "../../types";
+import moment from "moment";
 
 const { Title } = Typography;
 
@@ -72,7 +73,7 @@ const Transactions: React.FC = () => {
             type: transaction.type,
             senderWallet: transaction.senderWallet,
             receiverWallet: transaction.receiverWallet,
-            createdAt: transaction.createdAt,
+            createdAt: moment(transaction.createdAt).format("MMM Do YY"),
         })
     );
 

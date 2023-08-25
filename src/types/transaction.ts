@@ -1,4 +1,3 @@
-import { User } from "./user";
 import { Wallet } from "./wallet";
 
 export enum TransactionEnumType {
@@ -9,9 +8,10 @@ export enum TransactionEnumType {
 
 export interface Transaction {
     id: string;
-    amount: number;
-    type: TransactionEnumType;
-    user: User;
+    createdAt: string;
+    updatedAt?: string;
+    amount: string;
+    type: string;
     senderWallet: Wallet;
     receiverWallet: Wallet;
 }

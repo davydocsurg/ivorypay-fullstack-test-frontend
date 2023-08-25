@@ -6,15 +6,17 @@ import React, {
     useState,
 } from "react";
 import { api, endPoints } from "../services";
-import { TransactionInput } from "../types";
+import { Transaction, TransactionInput } from "../types";
 import { getAuthUserWallet, saveAuthUserWallet } from "../constants/authConfig";
 
 interface WalletContextData {
+    transactions: Transaction[];
     walletBalance: number;
     createWallet(): Promise<number>;
     depositAmount(amount: number): Promise<number>;
     transferFunds(data: TransactionInput): Promise<number>;
     withdrawFunds(amount: number): Promise<number>;
+    fetchTransactions(): Promise<void>;
 }
 
 interface WalletProviderProps {
@@ -26,6 +28,8 @@ const wallet = getAuthUserWallet();
 
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const [walletBalance, setWalletBalance] = useState<number>(wallet.balance);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+
     const createWallet = useCallback(async () => {
         try {
             const response = await api.post(endPoints.wallets.create);
@@ -81,14 +85,28 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         }
     }, []);
 
+    const fetchTransactions = useCallback(async () => {
+        try {
+            const response = await api.get(endPoints.wallets.transactions);
+            console.log(response.data.transactions);
+
+            setTransactions(response.data.transactions);
+        } catch (error) {
+            console.error("Error while fetching transactions: ", error);
+            throw error;
+        }
+    }, []);
+
     return (
         <WalletContext.Provider
             value={{
+                transactions,
                 walletBalance,
                 createWallet,
                 depositAmount,
                 transferFunds,
                 withdrawFunds,
+                fetchTransactions,
             }}
         >
             {children}

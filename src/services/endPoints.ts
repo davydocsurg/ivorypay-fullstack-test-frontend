@@ -15,6 +15,7 @@ const endPoints = {
         deposit: "/wallets/deposit",
         transfer: "/wallets/transfer",
         withdraw: "/wallets/withdraw",
+        transactions: "/wallets/transactions",
     },
 };
 
@@ -36,6 +37,7 @@ const navbarLinks = {
         create: "/dashboard/wallets/create",
         deposit: "/dashboard/wallets/deposit",
         withdraw: "/dashboard/wallets/withdraw",
+        transactions: "/dashboard/wallets/transactions",
     },
     manageWallet: "/dashboard/manage-wallet",
     login: "/",
